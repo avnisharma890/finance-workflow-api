@@ -1,6 +1,7 @@
 import { ExpenseModel } from "./expense.model";
 import { ExpenseStatus } from "./expense.types";
 import { canTransition } from "./expense.state";
+import { Types } from "mongoose";
 
 export async function createExpense(data: any, userId: string) {
   return await ExpenseModel.create({
@@ -35,7 +36,7 @@ export async function approveExpense(id: string, adminId: string) {
 
   expense.status = ExpenseStatus.APPROVED;
   expense.approvedAt = new Date();
-  expense.approvedBy = adminId;
+  expense.approvedBy = new Types.ObjectId(adminId);
 
   await expense.save();
   return expense;
