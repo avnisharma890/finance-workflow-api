@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import * as service from "./expense.service";
 
 export async function create(req: Request, res: Response) {
-    if (!req.user) throw new Error("Unauthorized");
-  const expense = await service.createExpense(req.body, req.user.id);
+  const userId = (req as any).user.id;
+
+  const expense = await service.createExpense(req.body, userId);
   res.json(expense);
 }
 
@@ -15,7 +16,7 @@ export async function submit(req: Request, res: Response) {
 export async function approve(req: Request, res: Response) {
   const expense = await service.approveExpense(
     req.params.id as string,
-    req.user!.id
+    (req as any).user.id 
   );
   res.json(expense);
 }
